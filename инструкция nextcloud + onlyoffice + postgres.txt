@@ -1,0 +1,39 @@
+Запуск poda
+
+podman pod create -p 7070:80 -p 7080:8080 --name nextcloud-pod
+
+Запуск контейнера базы данных
+
+podman run -d --pod=nextcloud-pod --name=nextclouddb -e MYSQL_ROOT_PASSWORD="root" -e POSTGRES_DB="nextcloud" -e POSTGRES_USER="nextcloud" -e POSTGRES_PASSWORD="nextcloud"  -v /home/master/work/next/datastore/:/var/lib/postgresql/data postgres
+
+podman run -d --pod=nextcloud-pod --name=nextclouddb -e MYSQL_ROOT_PASSWORD="root" -e POSTGRES_DB="nextcloud" -e POSTGRES_USER="nextcloud" -e POSTGRES_PASSWORD="nextcloud"   postgres
+
+Запуск контейнера nextcloud
+
+podman run -d --pod=nextcloud-pod --name=nextcloud -e POSTGRES_HOST="127.0.0.1" -e POSTGRES_USER="nextcloud" -e POSTGRES_PASSWORD="nextcloud" -e POSTGRES_DB="nextcloud"  -v /home/master/work/next/nextcloud/:/var/www/html/ nextcloud
+
+podman run -d --pod=nextcloud-pod --name=nextcloud -e POSTGRES_HOST="127.0.0.1" -e POSTGRES_USER="nextcloud" -e POSTGRES_PASSWORD="nextcloud" -e POSTGRES_DB="nextcloud" nextcloud
+
+Запуск контейнера onlyoffice
+
+podman run -d --pod=nextcloud-pod --name=onlyoffice -v  /home/master/work/next/onlyoffice/log/:/var/log/onlyoffice  -v /home/master/work/next/onlyoffice/data/:/var/www/onlyoffice/Data  onlyoffice/documentserver
+
+podman run -d --pod=nextcloud-pod --name=onlyoffice  onlyoffice/documentserver
+
+Замена порта onlyoffice
+
+podman exec -it onlyoffice cat /etc/nginx/conf.d/ds.conf
+podman exec -it onlyoffice nano /etc/nginx/conf.d/ds.conf
+5100D2E52E
+заменяем 80 --> 8080
+
+
+Попробовать запустить все от root
+
+
+возможно сработает после дополнения
+
+https://<MY.DOMAIN.TLD>/index.php/apps/documentserver_community/ #для доступа внутри
+
+
+
