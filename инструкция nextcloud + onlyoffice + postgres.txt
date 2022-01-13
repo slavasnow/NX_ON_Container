@@ -33,7 +33,6 @@ podman exec -it onlyoffice nano /etc/nginx/conf.d/ds.conf
 
 возможно сработает после дополнения
 
-https://<MY.DOMAIN.TLD>/index.php/apps/documentserver_community/ #для доступа внутри
-
+https://<MY.DOMAIN.TLD>/index.php/apps/documentserver_community/ #путь, если установлен внутри контейнера
 
 podman exec -it -u www-data nextcloud ./occ config:system:set allow_local_remote_servers --value true --type bool
